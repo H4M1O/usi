@@ -1,10 +1,16 @@
 #!/bin/bash
-# This script stop, clean the dhcpd.leases files and restart the DHCP service.
-# Script created by Claudio Proietti v. 1.1 created on 17/02/2016
+
+# Universal Script Installer 
+
+# Script created by Claudio Proietti v. 1.0 created on 28/04/2016
+
+# This script is intended to allows an easy deploy of a standalone Debian/Ubuntu server
+# the scope is to allow the user to have an easy menu pretty similar to tasksel but with
+# more options like LAMP, OS_HARDENING, DBs or other common setup and configurations.
 
 # Script description
-echo "$(tput setaf 5)This script stop, clean the dhcpd.leases files and restart the DHCP service."
-echo -e "Script created by Claudio Proietti for Gambit Research LTD$(tput sgr 0)\n"
+echo "$(tput setaf 5)Welcome to U.S.I. - Universal Script Installer v. 1.0"
+echo -e "Script created by Claudio Proietti under MIT license$(tput sgr 0)\n"
 
 function main ()
 {
