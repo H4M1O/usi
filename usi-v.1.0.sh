@@ -85,57 +85,64 @@ function hst_cfg ()
 	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/exim4/update-exim4.conf not found!!!$(tput sgr 0)\n"
 	else
     	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/exim4/update-exim4.conf.con is present!$(tput sgr 0)\n"
-	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g /etc/exim4/update-exim4.conf
 	fi
 
 	if [ ! -f /etc/printcap ]; then
 	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/printcap not found!!!$(tput sgr 0)\n"
 	else
     	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/printcap is present!$(tput sgr 0)\n"
-	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g /etc/printcap
 	fi
 
 	if [ ! -f /etc/hostname ]; then
 	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/hostname not found!!!$(tput sgr 0)\n"
 	else
     	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/hostname is present!$(tput sgr 0)\n"
-	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g /etc/hostname
 	fi
 
 	if [ ! -f /etc/hosts ]; then
 	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/hosts not found!!!$(tput sgr 0)\n"
 	else
     	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/hosts is present!$(tput sgr 0)\n"
-	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g /etc/hosts
 	fi
 
 	if [ ! -f /etc/ssh/ssh_host_rsa_key.pub ]; then
 	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/ssh/ssh_host_rsa_key.pub not found!!!$(tput sgr 0)\n"
 	else
     	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/ssh/ssh_host_rsa_key.pub is present!$(tput sgr 0)\n"
-	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g /etc/ssh/ssh_host_rsa_key.pub
 	fi
 
 	if [ ! -f /etc/ssh/ssh_host_dsa_key.pub ]; then
 	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/ssh/ssh_host_dsa_key.pub not found!!!$(tput sgr 0)\n"
 	else
     	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/ssh/ssh_host_dsa_key.pub is present!$(tput sgr 0)\n"
-	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g /etc/ssh/ssh_host_dsa_key.pub
 	fi
 
 	if [ ! -f /etc/motd ]; then
 	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/motd not found!!!$(tput sgr 0)\n"
 	else
     	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/motd is present!$(tput sgr 0)\n"
-	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g /etc/motd
 	fi
 
 	if [ ! -f /etc/ssmtp/ssmtp.conf ]; then
 	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/ssmtp/ssmtp.conf not found!!!$(tput sgr 0)\n"
 	else
     	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/ssmtp/ssmtp.conf is present!$(tput sgr 0)\n"
-	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g /etc/ssmtp/ssmtp.conf
 	fi
+	
+	hostname $NEW_HOSTNAME	
+	
+	/etc/init.d/hostname.sh start
+	HOSTNAME=$NEW_HOSTNAME	
+	echo -e "$(tput setaf 0)$(tput setab 2)\nYOUR NEW HOSTNAME IS: $HOSTNAME anyway to apply it reboot is required!$(tput sgr 0)\n"
+
 }
 
 # Call to the main function
