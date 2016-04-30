@@ -4,13 +4,9 @@
 
 # Script created by Claudio Proietti v. 1.0 created on 28/04/2016
 
-# This script is intended to allows an easy deploy of a standalone Debian/Ubuntu server
+# This script is intended to allows an easy deploy of a standalone Debian server
 # the scope is to allow the user to have an easy menu pretty similar to tasksel but with
 # more options like LAMP, OS_HARDENING, DBs or other common setup and configurations.
-
-# Script description
-echo "$(tput setaf 5)Welcome to U.S.I. - Universal Script Installer v. 1.0"
-echo -e "Script created by Claudio Proietti under MIT license$(tput sgr 0)\n"
 
 function main ()
 {
@@ -29,19 +25,12 @@ function main ()
 		then
 		# case to select the right option from 1 to 6
 			case $OPT in 
-				1 ) start-dhcp
+				1 ) OS_HARDENING 
 				;;
-				2 ) stop-dhcp
+				2 ) LAMP 
 				;;
-				3 ) restart-dhcp
-				;;
-				4 ) flush-dhcp
-				;;
-				5 ) fullservice-dhcp
-				echo -e "$(tput setaf 7)$(tput setab 0)Thank you for using this script!$(tput sgr 0)\n"
-				break
-				;;
-				6 ) echo -e "$(tput setaf 7)$(tput setab 0)Thank you for using this script!$(tput sgr 0)\n"
+				3 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nThank you for using this script!$(tput sgr 0)\n"
 				break
 				;;
 			esac
@@ -58,53 +47,29 @@ function main ()
 function menu () 
 {
 # The scope of this function is only to show the contextual menu
+	echo "$(tput setaf 5)Welcome to U.S.I. - Universal Script Installer v. 1.0"
+	echo -e "Script created by Claudio Proietti under MIT license$(tput sgr 0)\n"
 	echo -e "These are the available options:\n"
-	echo "1 - Start DHCP Service"
-	echo "2 - Stop DHCP Service" 
-	echo "3 - Restart (Stop and Start) DHCPD Service"
-	echo "4 - Free DHCP Pool (removes dhcps.leases file)"
-	echo -e "\n5 - FULL SERVICE (stop, remove dhcpd.leases file, start the DHCP service and exit the script)"
-	echo -e "\n6 - Exit the script\n"
+	echo "1 - OS_HARDENING (hostname, ifconfig, ssh, fail2ban, ufw)"
+	echo "2 - LAMP (Apache, MySQL, PHP)" 
+	echo -e "\n3 - Exit the script\n"
 	echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 }
 
-function start-dhcp ()
+function OS_HARDENING ()
 {
-# This function start the DHCPD Service
-	start isc-dhcp-server
-	echo -e "$(tput setaf 0)$(tput setab 2)DHCP SERVICE STARTED!$(tput sgr 0)\n"
+# This function is used to complete the hardening of the OS
+# It will use the following commands hostname, ifconfig, ssh, sudo, fail2ban and ufw.
+	clear	
+	echo -e "$(tput setaf 0)$(tput setab 2)\nOS_HARDENING COMPLETED!$(tput sgr 0)\n"
 }
 
-function stop-dhcp ()
+function LAMP ()
 {
-# This function stop the DHCPD Service
-	stop isc-dhcp-server
-	echo -e "$(tput setaf 0)$(tput setab 2)DHCP SERVICE STOPPED!$(tput sgr 0)\n"
-}
-
-function restart-dhcp ()
-{
-# This function restart the DHCPD Service
-	restart isc-dhcp-server
-	echo -e "$(tput setaf 0)$(tput setab 2)DHCP SERVICE RESTARTED!$(tput sgr 0)\n"
-}
-
-function flush-dhcp ()
-{
-# This function delete every file in the directory /var/lib/dhcp/
-# normally the only files contained in that directory are
-# dhcpd.leases and a temporary file used by the DHCPD service
-	rm /var/lib/dhcp/*
-	echo -e "$(tput setaf 0)$(tput setab 2)DHCP LEASE FILE DELETED!$(tput sgr 0)\n"
-}
-
-function fullservice-dhcp ()
-{
-# This function should call in sequence stop-dhcp, flush-dhcp and start-dhcp functions
-	stop-dhcp
-	flush-dhcp
-	start-dhcp
-	echo -e "$(tput setaf 0)$(tput setab 2)FULL SERVICE EXECUTED!$(tput sgr 0)\n" 
+# This function install the default LAMP server
+# the following packages will be installed Apache, MySQL and PHP with the most common modules
+	clear	
+	echo -e "$(tput setaf 0)$(tput setab 2)\nSERVER LAMP INSTALLED!$(tput sgr 0)\n"
 }
 
 # Call to the main function
