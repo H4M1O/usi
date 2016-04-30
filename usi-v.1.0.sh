@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Universal Script Installer 
-
 # Script created by Claudio Proietti v. 1.0 created on 28/04/2016
 
 # This script is intended to allows an easy deploy of a standalone Debian server
@@ -60,7 +59,9 @@ function OS_HARDENING ()
 {
 # This function is used to complete the hardening of the OS
 # It will use the following commands hostname, ifconfig, ssh, sudo, fail2ban and ufw.
+	
 	clear	
+	hst_cfg
 	echo -e "$(tput setaf 0)$(tput setab 2)\nOS_HARDENING COMPLETED!$(tput sgr 0)\n"
 }
 
@@ -70,6 +71,71 @@ function LAMP ()
 # the following packages will be installed Apache, MySQL and PHP with the most common modules
 	clear	
 	echo -e "$(tput setaf 0)$(tput setab 2)\nSERVER LAMP INSTALLED!$(tput sgr 0)\n"
+}
+
+function hst_cfg ()
+{
+
+	echo "$(tput setaf 3)The actual hostname is: $(tput sgr 0)"
+	echo $HOSTNAME	
+	echo "$(tput setaf 3)Write the new hostname and press enter: $(tput sgr 0)"	
+	read NEW_HOSTNAME
+
+	if [ ! -f /etc/exim4/update-exim4.conf.conf ]; then
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/exim4/update-exim4.conf not found!!!$(tput sgr 0)\n"
+	else
+    	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/exim4/update-exim4.conf.con is present!$(tput sgr 0)\n"
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	fi
+
+	if [ ! -f /etc/printcap ]; then
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/printcap not found!!!$(tput sgr 0)\n"
+	else
+    	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/printcap is present!$(tput sgr 0)\n"
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	fi
+
+	if [ ! -f /etc/hostname ]; then
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/hostname not found!!!$(tput sgr 0)\n"
+	else
+    	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/hostname is present!$(tput sgr 0)\n"
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	fi
+
+	if [ ! -f /etc/hosts ]; then
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/hosts not found!!!$(tput sgr 0)\n"
+	else
+    	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/hosts is present!$(tput sgr 0)\n"
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	fi
+
+	if [ ! -f /etc/ssh/ssh_host_rsa_key.pub ]; then
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/ssh/ssh_host_rsa_key.pub not found!!!$(tput sgr 0)\n"
+	else
+    	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/ssh/ssh_host_rsa_key.pub is present!$(tput sgr 0)\n"
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	fi
+
+	if [ ! -f /etc/ssh/ssh_host_dsa_key.pub ]; then
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/ssh/ssh_host_dsa_key.pub not found!!!$(tput sgr 0)\n"
+	else
+    	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/ssh/ssh_host_dsa_key.pub is present!$(tput sgr 0)\n"
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	fi
+
+	if [ ! -f /etc/motd ]; then
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/motd not found!!!$(tput sgr 0)\n"
+	else
+    	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/motd is present!$(tput sgr 0)\n"
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	fi
+
+	if [ ! -f /etc/ssmtp/ssmtp.conf ]; then
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: /etc/ssmtp/ssmtp.conf not found!!!$(tput sgr 0)\n"
+	else
+    	echo -e "$(tput setaf 0)$(tput setab 2)\nThe file: /etc/ssmtp/ssmtp.conf is present!$(tput sgr 0)\n"
+	sed -i.bak s/$HOSTNAME/$NEW_HOSTNAME/g touch
+	fi
 }
 
 # Call to the main function
