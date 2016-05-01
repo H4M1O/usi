@@ -51,6 +51,12 @@ function so_update ()
 		then
 			case $SUP in 
 				1 ) apt-get update && sudo apt-get upgrade -y
+				apt-get install vim
+				touch .vimrc
+				echo ":colorscheme slate" > .vimrc
+				echo ":set cursorcolumn" >> .vimrc
+				echo ":set cursorline" >> .vimrc
+				echo ":set number" >> .vimrc
 				echo -e "$(tput setaf 0)$(tput setab 2)\nUPDATE AND UPGRADE COMPLETED!$(tput sgr 0)\n"
 				break
 				;;
@@ -320,7 +326,7 @@ function serv_ssh ()
 				1 ) apt-get install openssh-client
 				break
 				;;
-				2 )
+				2 ) apt-get install openssh-server
 				break	
 				;;
 				3 )  
@@ -349,7 +355,7 @@ function inst_sudo ()
 		echo "$(tput setaf 5)Select the option to install sudo and configure it for a new user::"
 		echo "1 - ADD A NEW USER"
 		echo "2 - INSTALL SUDO" 
-		echo "3 - CALL VISUDO" 
+		echo "3 - MODIFY SSH CONNECTIONS AND AUTHORIZATIONS" 
 		echo "4 - CHANGE ROOT PASSWORD" 
 		echo -e "\n5 - Skip this configuration..." 
 		echo -e "\n0 - Return to the main menu\n"
@@ -359,16 +365,25 @@ function inst_sudo ()
 		if [ $OPT5 -ge 0 -a $OPT5 -le 5 ] 
 		then
 			case $OPT5 in 
-				1 )
+				1 ) echo "$(tput setaf 3)Insert the Full Name of the new user (ex. Claudio Proietti): $(tput sgr 0)" 
+				read FULL_NAME
+				echo "$(tput setaf 3)Insert the userame of the new user (ex. cproietti): $(tput sgr 0)" 
+				read USER_NAME
+				echo "$(tput setaf 3)Insert the password of the new user (ex. cproietti): $(tput sgr 0)" 
+				read PWD
+				useradd -c $FULL_NAME -m -p $PWD -s "/bin/bash" -U $USER_NAME
 				break
 				;;
-				2 )
+				2 ) apt-get install sudo
+				echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
+				visudo
 				break	
 				;;
-				3 )
+				3 ) vi /etc/ssh/sshd_config
+				/etc/init.d/sshd restart
 				break	
 				;;
-				4 )
+				4 ) passwd
 				break	
 				;;
 				5 )  
@@ -405,10 +420,14 @@ function inst_f2b ()
 		if [ $OPT6 -ge 0 -a $OPT6 -le 3 ] 
 		then
 			case $OPT6 in 
-				1 )
+				1 ) apt-get install fail2ban
+				apt-get install sendmail-bin sendmail
 				break
 				;;
-				2 )
+				2 ) cp /etc/fail2ban/fail2ban.conf etc/fail2ban/fail2ban.local
+				cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+				vi /etc/fail2ban/jail.local
+				fail2ban-client reload
 				break	
 				;;
 				3 )  
@@ -445,10 +464,15 @@ function inst_ufw ()
 		if [ $OPT7 -ge 0 -a $OPT7 -le 3 ] 
 		then
 			case $OPT7 in 
-				1 )
+				1 ) apt-get install ufw
 				break
 				;;
-				2 )
+				2 ) ufw enable
+				ufw default deny incoming
+				ufw default allow outgoing
+				ufw allow ssh
+				ufw allow http
+				ufw status verbose
 				break	
 				;;
 				3 )  
@@ -496,10 +520,12 @@ function inst_webserv ()
 		if [ $OPT8 -ge 0 -a $OPT8 -le 3 ] 
 		then
 			case $OPT8 in 
-				1 )
+				1 ) apt-get install apache2 apache2-doc
+				service apache2 restart
 				break
 				;;
-				2 )
+				2 )  apt-get install nginx
+				systemctl restart nginx.service
 				break	
 				;;
 				3 )  
@@ -536,10 +562,10 @@ function inst_db ()
 		if [ $OPT9 -ge 0 -a $OPT9 -le 3 ] 
 		then
 			case $OPT9 in 
-				1 )
+				1 ) apt-get install mysql-server
 				break
 				;;
-				2 )
+				2 ) apt-get install postgresql-9.4 postgresql-client-9.4 postgresql-doc
 				break	
 				;;
 				3 )  
@@ -576,10 +602,13 @@ function inst_php ()
 		if [ $OPT10 -ge 0 -a $OPT10 -le 3 ] 
 		then
 			case $OPT10 in 
-				1 )
+				1 ) apt-get install php5-common php5-cli
 				break
 				;;
-				2 )
+				2 ) apt-get install php5-mysql libapache2-mod-php5 php5-pgsql php5-fpm php5-mysqlnd
+				touch /var/www/html/info.php
+				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+				chmod 777 /var/www/html/info.php
 				break	
 				;;
 				3 )  
