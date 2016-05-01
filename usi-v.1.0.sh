@@ -20,7 +20,7 @@ function main ()
 		read OPT
 		
 		# error handling if, it checks if the user insert something different from a number between 1 and 3
-		if [ $OPT -ge 1 -a $OPT -le 3 ] 
+		if [ $OPT -ge 0 -a $OPT -le 2 ] 
 		then
 		# case to select the right option from 1 to 3
 			case $OPT in 
@@ -28,7 +28,7 @@ function main ()
 				;;
 				2 ) LAMP 
 				;;
-				3 ) clear
+				0 ) clear
 				echo -e "$(tput setaf 7)$(tput setab 0)\nThank you for using this script!$(tput sgr 0)\n"
 				exit 1
 				;;
@@ -49,9 +49,9 @@ function menu ()
 	echo "$(tput setaf 5)Welcome to U.S.I. - Universal Script Installer v. 1.0"
 	echo -e "Script created by Claudio Proietti under MIT license$(tput sgr 0)\n"
 	echo -e "These are the available options:\n"
-	echo "1 - OS_HARDENING (hostname, ifconfig, ssh, fail2ban, ufw)"
-	echo "2 - LAMP (Apache, MySQL, PHP)" 
-	echo -e "\n3 - Exit the script\n"
+	echo "1 - OS_HARDENING (hostname, ifconfig, ssh, sudo, fail2ban, ufw)"
+	echo "2 - LAMP (WebServer Apache or NGIX, DB MySQL or PostGres, PHP and PHP Modules)" 
+	echo -e "\n0 - Exit the script\n"
 	echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 }
 
@@ -63,15 +63,11 @@ function OS_HARDENING ()
 	clear	
 	hst_cfg 
 	ip_addr
+	serv_ssh
+	inst_sudo
+	inst_f2b
+	inst_ufw
 	echo -e "$(tput setaf 0)$(tput setab 2)\nOS_HARDENING COMPLETED!$(tput sgr 0)\n"
-}
-
-function LAMP ()
-{
-# This function install the default LAMP server
-# the following packages will be installed Apache, MySQL and PHP with the most common modules
-	clear	
-	echo -e "$(tput setaf 0)$(tput setab 2)\nSERVER LAMP INSTALLED!$(tput sgr 0)\n"
 }
 
 function hst_cfg ()
@@ -83,16 +79,13 @@ function hst_cfg ()
 	do
 		echo "$(tput setaf 5)Do you want change the HOSTNAME:"
 		echo "1 - YES"
-		echo "2 - NO" 
-		echo -e "\n3 - Exit the script\n"
+		echo -e "\n2 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 		# readed input from keyboard
 		read OPT2
-		
-		# error handling if, it checks if the user insert something different from a number between 1 and 2
-		if [ $OPT2 -ge 1 -a $OPT2 -le 3 ] 
+		if [ $OPT2 -ge 0 -a $OPT2 -le 2 ] 
 		then
-		# case to select the right option from 1 to 2
 			case $OPT2 in 
 				1 )  
 				echo "$(tput setaf 3)The actual hostname is: $(tput sgr 0)"
@@ -165,7 +158,7 @@ function hst_cfg ()
 				echo -e "$(tput setaf 7)$(tput setab 0)\nHostname configuration skipped!$(tput sgr 0)\n"
 				break
 				;;
-				3 ) clear
+				0 ) clear
 				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
 				main
 				;;
@@ -190,13 +183,14 @@ function ip_addr ()
 		echo "$(tput setaf 5)Choose the type of the network configuration to setup:"
 		echo "1 - DHCP"
 		echo "2 - STATIC IPV4" 
-		echo -e "\n3 - Skip this part of the script\n"
+		echo -e "\n3 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 		# readed input from keyboard
 		read OPT3
 		
 		# error handling if, it checks if the user insert something different from a number between 1 and 2
-		if [ $OPT3 -ge 1 -a $OPT3 -le 3 ] 
+		if [ $OPT3 -ge 0 -a $OPT3 -le 3 ] 
 		then
 		# case to select the right option from 1 to 2
 			case $OPT3 in 
@@ -248,20 +242,322 @@ function ip_addr ()
 				echo -e "$(tput setaf 0)$(tput setab 2)\nSTATIC IPV4 CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				break
 				;;
-				3 ) clear
+				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nNetwork configuration skipped!$(tput sgr 0)\n"
-				main	
 				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
 				;;
 			esac
 		else
-			echo $OPT
+			echo $OPT3
 			clear
 			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
 		fi
 
 	done
 
+}
+
+function serv_ssh () 
+{
+	# declared integer for user's choice
+	declare -i OPT4
+	while true
+	do
+		echo "$(tput setaf 5)Choose the type of the SSH software to install and configure:"
+		echo "1 - SSH CLIENT"
+		echo "2 - SSH SERVER" 
+		echo -e "\n3 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT4
+		if [ $OPT4 -ge 0 -a $OPT4 -le 3 ] 
+		then
+			case $OPT4 in 
+				1 )
+				break
+				;;
+				2 )
+				break	
+				;;
+				3 )  
+				echo -e "$(tput setaf 7)$(tput setab 0)\nSSH configuration skipped!$(tput sgr 0)\n"
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT4
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
+}
+
+function inst_sudo () 
+{
+	# declared integer for user's choice
+	declare -i OPT5
+	while true
+	do
+		echo "$(tput setaf 5)Select the option to install sudo and configure it for a new user::"
+		echo "1 - ADD A NEW USER"
+		echo "2 - INSTALL SUDO" 
+		echo "3 - CALL VISUDO" 
+		echo "4 - CHANGE ROOT PASSWORD" 
+		echo -e "\n5 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT5
+		if [ $OPT5 -ge 0 -a $OPT5 -le 5 ] 
+		then
+			case $OPT5 in 
+				1 )
+				break
+				;;
+				2 )
+				break	
+				;;
+				3 )
+				break	
+				;;
+				4 )
+				break	
+				;;
+				5 )  
+				echo -e "$(tput setaf 7)$(tput setab 0)\nUsers configuration skipped!$(tput sgr 0)\n"
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT5
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
+}
+
+function inst_f2b ()
+{
+	# declared integer for user's choice
+	declare -i OPT6
+	while true
+	do
+		echo "$(tput setaf 5)Choose the options to install and configure fail2ban:"
+		echo "1 - INSTALL FAIL2BAN"
+		echo "2 - CONFIGURE FAIL2BAN" 
+		echo -e "\n3 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT6
+		if [ $OPT6 -ge 0 -a $OPT6 -le 3 ] 
+		then
+			case $OPT6 in 
+				1 )
+				break
+				;;
+				2 )
+				break	
+				;;
+				3 )  
+				echo -e "$(tput setaf 7)$(tput setab 0)\nFail2Ban configuration skipped!$(tput sgr 0)\n"
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT6
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
+}
+
+function inst_ufw ()
+{
+	# declared integer for user's choice
+	declare -i OPT7
+	while true
+	do
+		echo "$(tput setaf 5)Choose the options to install and configure UFW:"
+		echo "1 - INSTALL UFW"
+		echo "2 - CONFIGURE UFW" 
+		echo -e "\n3 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT7
+		if [ $OPT7 -ge 0 -a $OPT7 -le 3 ] 
+		then
+			case $OPT7 in 
+				1 )
+				break
+				;;
+				2 )
+				break	
+				;;
+				3 )  
+				echo -e "$(tput setaf 7)$(tput setab 0)\nUFW configuration skipped!$(tput sgr 0)\n"
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT7
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
+}
+
+function LAMP ()
+{
+# This function is used to install and configure a LAMP Server
+# It will use the following other functions.
+	
+	inst_webserv	
+	inst_db 
+	inst_php
+	echo -e "$(tput setaf 0)$(tput setab 2)\nLAMP INSTALLATION COMPLETED!$(tput sgr 0)\n"
+}
+
+function inst_webserv ()
+{
+	# declared integer for user's choice
+	declare -i OPT8
+	while true
+	do
+		echo "$(tput setaf 5)Choose the Web Server to install and configure:"
+		echo "1 - INSTALL APACHE"
+		echo "2 - INSTALL NGIX" 
+		echo -e "\n3 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT8
+		if [ $OPT8 -ge 0 -a $OPT8 -le 3 ] 
+		then
+			case $OPT8 in 
+				1 )
+				break
+				;;
+				2 )
+				break	
+				;;
+				3 )  
+				echo -e "$(tput setaf 7)$(tput setab 0)\nWeb Server configuration skipped!$(tput sgr 0)\n"
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT8
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
+}
+
+function inst_db ()
+{
+	# declared integer for user's choice
+	declare -i OPT9
+	while true
+	do
+		echo "$(tput setaf 5)Choose the Database to install and configure:"
+		echo "1 - INSTALL MYSQL"
+		echo "2 - INSTALL POSTGRES" 
+		echo -e "\n3 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT9
+		if [ $OPT9 -ge 0 -a $OPT9 -le 3 ] 
+		then
+			case $OPT9 in 
+				1 )
+				break
+				;;
+				2 )
+				break	
+				;;
+				3 )  
+				echo -e "$(tput setaf 7)$(tput setab 0)\nDatabase configuration skipped!$(tput sgr 0)\n"
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT9
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
+}
+
+function inst_php ()
+{
+	# declared integer for user's choice
+	declare -i OPT10
+	while true
+	do
+		echo "$(tput setaf 5)Choose the options to install and configure PHP with its modules:"
+		echo "1 - INSTALL PHP"
+		echo "2 - CONFIGURE PHP MODULES" 
+		echo -e "\n3 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT10
+		if [ $OPT10 -ge 0 -a $OPT10 -le 3 ] 
+		then
+			case $OPT10 in 
+				1 )
+				break
+				;;
+				2 )
+				break	
+				;;
+				3 )  
+				echo -e "$(tput setaf 7)$(tput setab 0)\nUFW configuration skipped!$(tput sgr 0)\n"
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT10
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
 }
 
 # Call to the main function
