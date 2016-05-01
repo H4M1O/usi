@@ -1,2 +1,2 @@
-# usi
-Universal Semplified Installation
+# U.S.I.
+Universal Script Installer
