@@ -16,7 +16,7 @@ function main ()
 	while true
 	do
 		menu
-		# readed input from keyboard
+		# read input from keyboard
 		read OPT
 		
 		# error handling if, it checks if the user insert something different from a number between 1 and 3
@@ -61,7 +61,7 @@ function OS_HARDENING ()
 # It will use the following commands hostname, ifconfig, ssh, sudo, fail2ban and ufw.
 	
 	clear	
-	hst_cfg
+	hst_cfg 
 	ip_addr
 	echo -e "$(tput setaf 0)$(tput setab 2)\nOS_HARDENING COMPLETED!$(tput sgr 0)\n"
 }
@@ -162,7 +162,7 @@ function hst_cfg ()
 				echo -e "$(tput setaf 0)$(tput setab 2)\nYOUR NEW HOSTNAME IS: $HOSTNAME anyway to apply it reboot is required!$(tput sgr 0)\n"
 				;;
 				2 )  
-				echo -e "$(tput setaf 7)$(tput setab 0)\nNetwork configuration skipped!$(tput sgr 0)\n"
+				echo -e "$(tput setaf 7)$(tput setab 0)\nHostname configuration skipped!$(tput sgr 0)\n"
 				break
 				;;
 				3 ) clear
@@ -200,9 +200,51 @@ function ip_addr ()
 		then
 		# case to select the right option from 1 to 2
 			case $OPT3 in 
-				1 ) cat /etc/network/interfaces
+				1 ) echo "# This file describes the network interfaces available on your system" > /etc/network/interfaces
+				echo "# and how to activate them. For more information, see interfaces(5)." >> /etc/network/interfaces
+				echo " " >> /etc/network/interfaces
+				echo "source /etc/network/interfaces.d/*" >> /etc/network/interfaces
+				echo " " >> /etc/network/interfaces
+				echo "# The loopback network interface" >> /etc/network/interfaces
+				echo "auto lo" >> /etc/network/interfaces
+				echo "iface lo inet loopback" >> /etc/network/interfaces
+				echo " " >> /etc/network/interfaces
+				echo "auto eth0" >> /etc/network/interfaces
+    				echo "allow-hotplug eth0" >> /etc/network/interfaces
+    				echo "iface eth0 inet dhcp" >> /etc/network/interfaces
+				ifconfig eth0 down
+				ifconfig eth0 up
+				echo -e "$(tput setaf 0)$(tput setab 2)\nDHCP CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				;;
-				2 ) cat /etc/network/interfaces
+				2 ) echo "# This file describes the network interfaces available on your system" > /etc/network/interfaces
+				echo "# and how to activate them. For more information, see interfaces(5)." >> /etc/network/interfaces
+				echo " " >> /etc/network/interfaces
+				echo "source /etc/network/interfaces.d/*" >> /etc/network/interfaces
+				echo " " >> /etc/network/interfaces
+				echo "# The loopback network interface" >> /etc/network/interfaces
+				echo "auto lo" >> /etc/network/interfaces
+				echo "iface lo inet loopback" >> /etc/network/interfaces
+				echo " " >> /etc/network/interfaces
+				echo "auto eth0" >> /etc/network/interfaces
+    				echo "iface eth0 inet static" >> /etc/network/interfaces
+				echo "$(tput setaf 3)Write the new IP address and press enter: $(tput sgr 0)"	
+				read IPV4
+				echo "$(tput setaf 3)Write the new subnet mask and press enter: $(tput sgr 0)"	
+        			echo "address $IPV4S" >> /etc/network/interfaces
+				read SUBNET
+        			echo "netmask $SUBNET" >> /etc/network/interfaces
+				echo "$(tput setaf 3)Write the new Gateway and press enter: $(tput sgr 0)"	
+				read GTW
+        			echo "gateway $GTW" >> /etc/network/interfaces
+				echo "$(tput setaf 3)Write the Primary DNS and press enter: $(tput sgr 0)"	
+				read DNS1
+				echo "nameserver $DNS1" >> /etc/resolv.conf
+				echo "$(tput setaf 3)Write the Secondary DNS and press enter: $(tput sgr 0)"	
+				read DNS2
+				echo "nameserver $DNS2" >> /etc/resolv.conf
+				ifconfig eth0 down
+				ifconfig eth0 up
+				echo -e "$(tput setaf 0)$(tput setab 2)\nSTATIC IPV4 CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				;;
 				3 ) clear
 				echo -e "$(tput setaf 7)$(tput setab 0)\nNetwork configuration skipped!$(tput sgr 0)\n"
