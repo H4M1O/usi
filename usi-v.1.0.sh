@@ -10,7 +10,6 @@
 function main ()
 {
 # This is the main function that show the menu and allows the user to make a choice
-	
 	# declared integer for user's choice
 	declare -i OPT
 	while true
@@ -18,11 +17,8 @@ function main ()
 		menu
 		# read input from keyboard
 		read OPT
-		
-		# error handling if, it checks if the user insert something different from a number between 1 and 3
 		if [ $OPT -ge 0 -a $OPT -le 2 ] 
 		then
-		# case to select the right option from 1 to 3
 			case $OPT in 
 				1 ) OS_HARDENING 
 				;;
@@ -38,9 +34,39 @@ function main ()
 			clear
 			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
 		fi
-
 	done
+}
 
+function so_update () 
+{
+# This is the main function that show the menu and allows the user to make a choice
+	# declared integer for user's choice
+	declare -i SUP
+	while true
+	do
+		menu2
+		# read input from keyboard
+		read SUP
+		if [ $SUP -ge 0 -a $SUP -le 2 ] 
+		then
+			case $SUP in 
+				1 ) apt-get update && sudo apt-get upgrade -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nUPDATE AND UPGRADE COMPLETED!$(tput sgr 0)\n"
+				break
+				;;
+				2 ) break 
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nThank you for using this script!$(tput sgr 0)\n"
+				exit 1
+				;;
+			esac
+		else
+			echo $SUP
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
 }
 
 function menu () 
@@ -51,6 +77,19 @@ function menu ()
 	echo -e "These are the available options:\n"
 	echo "1 - OS_HARDENING (hostname, ifconfig, ssh, sudo, fail2ban, ufw)"
 	echo "2 - LAMP (WebServer Apache or NGIX, DB MySQL or PostGres, PHP and PHP Modules)" 
+	echo -e "\n0 - Exit the script\n"
+	echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+}
+
+function menu2 () 
+{
+# The scope of this function is only to show the contextual menu for the update
+	echo "$(tput setaf 5)Welcome to U.S.I. - Universal Script Installer v. 1.0"
+	echo -e "Script created by Claudio Proietti under MIT license$(tput sgr 0)\n"
+	echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: THE UPDATE OF THE PACKAGES IS REQUIRED!!!$(tput sgr 0)\n"
+	echo -e "These are the available options:\n"
+	echo "1 - UPDATE AND UPGRADE THE SYSTEM"
+	echo "2 - CONTINUE WITHOUT THE UPDATE (not recommended!!!)" 
 	echo -e "\n0 - Exit the script\n"
 	echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 }
@@ -278,7 +317,7 @@ function serv_ssh ()
 		if [ $OPT4 -ge 0 -a $OPT4 -le 3 ] 
 		then
 			case $OPT4 in 
-				1 )
+				1 ) apt-get install openssh-client
 				break
 				;;
 				2 )
@@ -561,4 +600,5 @@ function inst_php ()
 }
 
 # Call to the main function
+so_update
 main
