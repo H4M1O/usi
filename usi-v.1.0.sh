@@ -215,6 +215,7 @@ function ip_addr ()
 				ifconfig eth0 down
 				ifconfig eth0 up
 				echo -e "$(tput setaf 0)$(tput setab 2)\nDHCP CONFIGURED CORRECTLY!$(tput sgr 0)\n"
+				break
 				;;
 				2 ) echo "# This file describes the network interfaces available on your system" > /etc/network/interfaces
 				echo "# and how to activate them. For more information, see interfaces(5)." >> /etc/network/interfaces
@@ -228,7 +229,7 @@ function ip_addr ()
 				echo "auto eth0" >> /etc/network/interfaces
     				echo "iface eth0 inet static" >> /etc/network/interfaces
 				echo "$(tput setaf 3)Write the new IP address and press enter: $(tput sgr 0)"	
-				read IPV4
+				read IPV4S
 				echo "$(tput setaf 3)Write the new subnet mask and press enter: $(tput sgr 0)"	
         			echo "address $IPV4S" >> /etc/network/interfaces
 				read SUBNET
@@ -245,10 +246,12 @@ function ip_addr ()
 				ifconfig eth0 down
 				ifconfig eth0 up
 				echo -e "$(tput setaf 0)$(tput setab 2)\nSTATIC IPV4 CONFIGURED CORRECTLY!$(tput sgr 0)\n"
+				break
 				;;
 				3 ) clear
 				echo -e "$(tput setaf 7)$(tput setab 0)\nNetwork configuration skipped!$(tput sgr 0)\n"
 				main	
+				break
 				;;
 			esac
 		else
