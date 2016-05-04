@@ -227,6 +227,7 @@ function ip_addr ()
 	declare -i OPT3
 	while true
 	do
+		echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: This is an Experimental function, don't use it!!!$(tput sgr 0)\n"
 		echo "$(tput setaf 5)Choose the type of the network configuration to setup:"
 		echo "1 - DHCP"
 		echo "2 - STATIC IPV4" 
@@ -355,7 +356,7 @@ function inst_sudo ()
 	while true
 	do
 		echo "$(tput setaf 5)Select the option to install sudo and configure it for a new user::"
-		echo "1 - ADD A NEW USER"
+		echo "1 - ADD A NEW USER (Experimental and actually broken, don't use it!)"
 		echo "2 - INSTALL SUDO" 
 		echo "3 - MODIFY SSH CONNECTIONS AND AUTHORIZATIONS" 
 		echo "4 - CHANGE ROOT PASSWORD" 
@@ -460,7 +461,6 @@ function inst_ufw ()
 		then
 			case $OPT7 in 
 				1 ) apt-get install ufw -y
-				break
 				;;
 				2 ) ufw enable
 				ufw default deny incoming
@@ -468,7 +468,6 @@ function inst_ufw ()
 				ufw allow ssh
 				ufw allow http
 				ufw status verbose
-				break	
 				;;
 				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nUFW configuration skipped!$(tput sgr 0)\n"
