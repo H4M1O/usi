@@ -506,7 +506,7 @@ function inst_webserv ()
 	do
 		echo "$(tput setaf 5)Choose the Web Server to install and configure:"
 		echo "1 - INSTALL APACHE"
-		echo "2 - INSTALL NGIX" 
+		echo "2 - INSTALL NGIX (Experimental!) " 
 		echo -e "\n3 - Skip this configuration..." 
 		echo -e "\n0 - Return to the main menu\n"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
@@ -515,11 +515,11 @@ function inst_webserv ()
 		if [ $OPT8 -ge 0 -a $OPT8 -le 3 ] 
 		then
 			case $OPT8 in 
-				1 ) apt-get install apache2 apache2-doc -y --install-suggests
+				1 ) apt-get install apache2 apache2-doc -y
 				service apache2 restart
 				break
 				;;
-				2 )  apt-get install nginx -y --install-suggests
+				2 )  apt-get install nginx -y
 				systemctl restart nginx.service
 				break	
 				;;
@@ -547,23 +547,31 @@ function inst_db ()
 	while true
 	do
 		echo "$(tput setaf 5)Choose the Database to install and configure:"
-		echo "1 - INSTALL MYSQL"
-		echo "2 - INSTALL POSTGRES" 
-		echo -e "\n3 - Skip this configuration..." 
+		echo "1 - INSTALL MYSQL SERVER AND CLIENT"
+		echo "2 - INSTALL MYSQL CLIENT ONLY"
+		echo "3 - INSTALL POSTGRES SERVER AND CLIENT (Experimental!)"
+		echo "4 - INSTALL POSTGRES CLIENT ONLY (Experimental!)"
+		echo -e "\n5 - Skip this configuration..." 
 		echo -e "\n0 - Return to the main menu\n"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 		# readed input from keyboard
 		read OPT9
-		if [ $OPT9 -ge 0 -a $OPT9 -le 3 ] 
+		if [ $OPT9 -ge 0 -a $OPT9 -le 5 ] 
 		then
 			case $OPT9 in 
-				1 ) apt-get install mysql-server -y --install-suggests
+				1 ) apt-get install mysql-server -y
 				break
 				;;
-				2 ) apt-get install postgresql-9.4 postgresql-client-9.4 postgresql-doc -y --install-suggests
+				2 ) apt-get install mysql-client -y
+				break
+				;;
+				3 ) apt-get install postgresql-9.4 postgresql-client-9.4 postgresql-doc -y
 				break	
 				;;
-				3 )  
+				4 ) apt-get install postgresql-client-9.4 postgresql-doc -y
+				break	
+				;;
+				5 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nDatabase configuration skipped!$(tput sgr 0)\n"
 				break
 				;;
@@ -596,22 +604,22 @@ function inst_php ()
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 		# readed input from keyboard
 		read OPT10
-		if [ $OPT10 -ge 0 -a $OPT10 -le 3 ] 
+		if [ $OPT10 -ge 0 -a $OPT10 -le 5 ] 
 		then
 			case $OPT10 in 
-				1 ) apt-get install php5 libapache2-mod-php5 php5-mcrypt -y -install-suggests
+				1 ) apt-get install php5 libapache2-mod-php5 php5-mcrypt -y
 				touch /var/www/html/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
 				;;
-				2 ) apt-get install php5-fpm -y --install-suggests
+				2 ) apt-get install php5-fpm -y
 				touch /usr/share/ngix/www/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
 				;;
-				3 ) apt-get install php5-mysql -y --install-suggests
+				3 ) apt-get install php5-mysql -y
 				;;
-				4 ) apt-get install php5-pgsql -y --install-suggests
+				4 ) apt-get install php5-pgsql -y
 				;;
 				5)  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nUFW configuration skipped!$(tput sgr 0)\n"
