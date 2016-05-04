@@ -50,8 +50,8 @@ function so_update ()
 		if [ $SUP -ge 0 -a $SUP -le 2 ] 
 		then
 			case $SUP in 
-				1 ) apt-get update && sudo apt-get upgrade -y
-				apt-get install vim
+				1 ) apt-get update && sudo apt-get upgrade -y --install-suggests
+				apt-get install vim -y --install-suggests
 				touch .vimrc
 				echo ":colorscheme slate" > .vimrc
 				echo ":set cursorcolumn" >> .vimrc
@@ -327,9 +327,9 @@ function serv_ssh ()
 		if [ $OPT4 -ge 0 -a $OPT4 -le 3 ] 
 		then
 			case $OPT4 in 
-				1 ) apt-get install openssh-client
+				1 ) apt-get install openssh-client -y --install-suggests
 				;;
-				2 ) apt-get install openssh-server
+				2 ) apt-get install openssh-server -y --install-suggests
 				;;
 				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nSSH configuration skipped!$(tput sgr 0)\n"
@@ -375,7 +375,7 @@ function inst_sudo ()
 				read PWD
 				useradd -c $FULL_NAME -m -p $PWD -s "/bin/bash" -U $USER_NAME
 				;;
-				2 ) apt-get install sudo
+				2 ) apt-get install sudo -y --install-suggests
 				echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
 				visudo
 				;;
@@ -418,7 +418,7 @@ function inst_f2b ()
 		if [ $OPT6 -ge 0 -a $OPT6 -le 3 ] 
 		then
 			case $OPT6 in 
-				1 ) apt-get install fail2ban
+				1 ) apt-get install fail2ban -y --install-suggests
 				;;
 				2 ) cp /etc/fail2ban/fail2ban.conf etc/fail2ban/fail2ban.local
 				cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
@@ -459,7 +459,7 @@ function inst_ufw ()
 		if [ $OPT7 -ge 0 -a $OPT7 -le 3 ] 
 		then
 			case $OPT7 in 
-				1 ) apt-get install ufw
+				1 ) apt-get install ufw -y --install-suggests
 				break
 				;;
 				2 ) ufw enable
@@ -515,11 +515,11 @@ function inst_webserv ()
 		if [ $OPT8 -ge 0 -a $OPT8 -le 3 ] 
 		then
 			case $OPT8 in 
-				1 ) apt-get install apache2 apache2-doc
+				1 ) apt-get install apache2 apache2-doc -y --install-suggests
 				service apache2 restart
 				break
 				;;
-				2 )  apt-get install nginx
+				2 )  apt-get install nginx -y --install-suggests
 				systemctl restart nginx.service
 				break	
 				;;
@@ -557,10 +557,10 @@ function inst_db ()
 		if [ $OPT9 -ge 0 -a $OPT9 -le 3 ] 
 		then
 			case $OPT9 in 
-				1 ) apt-get install mysql-server
+				1 ) apt-get install mysql-server -y --install-suggests
 				break
 				;;
-				2 ) apt-get install postgresql-9.4 postgresql-client-9.4 postgresql-doc
+				2 ) apt-get install postgresql-9.4 postgresql-client-9.4 postgresql-doc -y --install-suggests
 				break	
 				;;
 				3 )  
@@ -597,9 +597,9 @@ function inst_php ()
 		if [ $OPT10 -ge 0 -a $OPT10 -le 3 ] 
 		then
 			case $OPT10 in 
-				1 ) apt-get install php5-common php5-cli
+				1 ) apt-get install php5-common php5-cli -y --install-suggests
 				;;
-				2 ) apt-get install php5-mysql libapache2-mod-php5 php5-pgsql php5-fpm php5-mysqlnd
+				2 ) apt-get install php5-mysql libapache2-mod-php5 php5-pgsql php5-fpm php5-mysqlnd -y --install-suggests
 				touch /var/www/html/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
