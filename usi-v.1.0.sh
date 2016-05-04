@@ -50,8 +50,8 @@ function so_update ()
 		if [ $SUP -ge 0 -a $SUP -le 2 ] 
 		then
 			case $SUP in 
-				1 ) apt-get update && sudo apt-get upgrade -y --install-suggests
-				apt-get install vim -y --install-suggests
+				1 ) apt-get update && sudo apt-get upgrade -y
+				apt-get install vim -y
 				touch .vimrc
 				echo ":colorscheme slate" > .vimrc
 				echo ":set cursorcolumn" >> .vimrc
@@ -327,9 +327,9 @@ function serv_ssh ()
 		if [ $OPT4 -ge 0 -a $OPT4 -le 3 ] 
 		then
 			case $OPT4 in 
-				1 ) apt-get install openssh-client -y --install-suggests
+				1 ) apt-get install openssh-client -y
 				;;
-				2 ) apt-get install openssh-server -y --install-suggests
+				2 ) apt-get install openssh-server -y
 				;;
 				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nSSH configuration skipped!$(tput sgr 0)\n"
@@ -375,7 +375,7 @@ function inst_sudo ()
 				read PWD
 				useradd -c $FULL_NAME -m -p $PWD -s "/bin/bash" -U $USER_NAME
 				;;
-				2 ) apt-get install sudo -y --install-suggests
+				2 ) apt-get install sudo -y
 				echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
 				visudo
 				;;
@@ -418,7 +418,7 @@ function inst_f2b ()
 		if [ $OPT6 -ge 0 -a $OPT6 -le 3 ] 
 		then
 			case $OPT6 in 
-				1 ) apt-get install fail2ban -y --install-suggests
+				1 ) apt-get install fail2ban -y
 				;;
 				2 ) cp /etc/fail2ban/fail2ban.conf etc/fail2ban/fail2ban.local
 				cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
@@ -459,7 +459,7 @@ function inst_ufw ()
 		if [ $OPT7 -ge 0 -a $OPT7 -le 3 ] 
 		then
 			case $OPT7 in 
-				1 ) apt-get install ufw -y --install-suggests
+				1 ) apt-get install ufw -y
 				break
 				;;
 				2 ) ufw enable
@@ -587,9 +587,11 @@ function inst_php ()
 	while true
 	do
 		echo "$(tput setaf 5)Choose the options to install and configure PHP with its modules:"
-		echo "1 - INSTALL PHP"
-		echo "2 - CONFIGURE PHP MODULES" 
-		echo -e "\n3 - Skip this configuration..." 
+		echo "1 - INSTALL AND CONFIGURE PHP FOR APACHE"
+		echo "2 - INSTALL AND CONFIGURE PHP FOR NGIX (Experimental!)"
+		echo "3 - INSTALL AND CONFIGURE PHP MODULES FOR MYSQL"
+		echo "4 - INSTALL AND CONFIGURE PHP MODULES FOR POSTGRES"
+		echo -e "\n5 - Skip this configuration..." 
 		echo -e "\n0 - Return to the main menu\n"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 		# readed input from keyboard
@@ -597,14 +599,21 @@ function inst_php ()
 		if [ $OPT10 -ge 0 -a $OPT10 -le 3 ] 
 		then
 			case $OPT10 in 
-				1 ) apt-get install php5-common php5-cli -y --install-suggests
-				;;
-				2 ) apt-get install php5-mysql libapache2-mod-php5 php5-pgsql php5-fpm php5-mysqlnd -y --install-suggests
+				1 ) apt-get install php5 libapache2-mod-php5 php5-mcrypt -y -install-suggests
 				touch /var/www/html/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
 				;;
-				3 )  
+				2 ) apt-get install php5-fpm -y --install-suggests
+				touch /usr/share/ngix/www/info.php
+				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+				chmod 777 /var/www/html/info.php
+				;;
+				3 ) apt-get install php5-mysql -y --install-suggests
+				;;
+				4 ) apt-get install php5-pgsql -y --install-suggests
+				;;
+				5)  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nUFW configuration skipped!$(tput sgr 0)\n"
 				break
 				;;
