@@ -123,7 +123,7 @@ function hst_cfg ()
 	while true
 	do
 		echo "$(tput setaf 5)Do you want change the HOSTNAME:"
-		echo "1 - YES"
+		echo "1 - YES. ATTENTION: This will restart your machine!!!"
 		echo -e "\n2 - Skip this configuration..." 
 		echo -e "\n0 - Return to the main menu\n"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
@@ -197,7 +197,9 @@ function hst_cfg ()
 				hostname $NEW_HOSTNAME	
 				/etc/init.d/hostname.sh start
 				HOSTNAME=$NEW_HOSTNAME	
-				echo -e "$(tput setaf 0)$(tput setab 2)\nYOUR NEW HOSTNAME IS: $HOSTNAME anyway to apply it reboot is required!$(tput sgr 0)\n"
+				echo -e "$(tput setaf 0)$(tput setab 2)\nYOUR NEW HOSTNAME IS: $HOSTNAME This machine will be restarted!$(tput sgr 0)\n"
+				init 6
+				break
 				;;
 				2 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nHostname configuration skipped!$(tput sgr 0)\n"
@@ -253,6 +255,7 @@ function ip_addr ()
     				echo "iface eth0 inet dhcp" >> /etc/network/interfaces
 				ifconfig eth0 down
 				ifconfig eth0 up
+				/etc/init.d/networking restart
 				echo -e "$(tput setaf 0)$(tput setab 2)\nDHCP CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				break
 				;;
@@ -284,6 +287,7 @@ function ip_addr ()
 				echo "nameserver $DNS2" >> /etc/resolv.conf
 				ifconfig eth0 down
 				ifconfig eth0 up
+				/etc/init.d/networking restart
 				echo -e "$(tput setaf 0)$(tput setab 2)\nSTATIC IPV4 CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				break
 				;;
@@ -324,10 +328,8 @@ function serv_ssh ()
 		then
 			case $OPT4 in 
 				1 ) apt-get install openssh-client
-				break
 				;;
 				2 ) apt-get install openssh-server
-				break	
 				;;
 				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nSSH configuration skipped!$(tput sgr 0)\n"
@@ -372,19 +374,15 @@ function inst_sudo ()
 				echo "$(tput setaf 3)Insert the password of the new user (ex. cproietti): $(tput sgr 0)" 
 				read PWD
 				useradd -c $FULL_NAME -m -p $PWD -s "/bin/bash" -U $USER_NAME
-				break
 				;;
 				2 ) apt-get install sudo
 				echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
 				visudo
-				break	
 				;;
 				3 ) vi /etc/ssh/sshd_config
 				/etc/init.d/sshd restart
-				break	
 				;;
 				4 ) passwd
-				break	
 				;;
 				5 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nUsers configuration skipped!$(tput sgr 0)\n"
@@ -421,14 +419,11 @@ function inst_f2b ()
 		then
 			case $OPT6 in 
 				1 ) apt-get install fail2ban
-				apt-get install sendmail-bin sendmail
-				break
 				;;
 				2 ) cp /etc/fail2ban/fail2ban.conf etc/fail2ban/fail2ban.local
 				cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 				vi /etc/fail2ban/jail.local
 				fail2ban-client reload
-				break	
 				;;
 				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nFail2Ban configuration skipped!$(tput sgr 0)\n"
@@ -603,13 +598,11 @@ function inst_php ()
 		then
 			case $OPT10 in 
 				1 ) apt-get install php5-common php5-cli
-				break
 				;;
 				2 ) apt-get install php5-mysql libapache2-mod-php5 php5-pgsql php5-fpm php5-mysqlnd
 				touch /var/www/html/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
-				break	
 				;;
 				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nUFW configuration skipped!$(tput sgr 0)\n"
