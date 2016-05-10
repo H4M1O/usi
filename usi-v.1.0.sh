@@ -53,10 +53,16 @@ function so_update ()
 				1 ) apt-get update && sudo apt-get upgrade -y
 				apt-get install vim -y
 				touch .vimrc
+				mkdir ~/.vim/colors
+				cp utils/molokai.vim ~/.vim/colors/
 				echo ":colorscheme slate" > .vimrc
 				echo ":set cursorcolumn" >> .vimrc
 				echo ":set cursorline" >> .vimrc
 				echo ":set number" >> .vimrc
+				echo ":set autoindent" >> .vimrc
+				echo ":syntax on" >> .vimrc
+				echo ":colorscheme molokai" >> .vimrc
+				echo ":let g:netrw_liststyle=3" >> .vimrc
 				echo -e "$(tput setaf 0)$(tput setab 2)\nUPDATE AND UPGRADE COMPLETED!$(tput sgr 0)\n"
 				break
 				;;
