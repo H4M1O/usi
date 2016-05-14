@@ -19,7 +19,7 @@ The installation of this script it's really easy the only passages to do are the
 development packages installed in your system) the standard::
 
 	# access as root
-	su -
+	su -root
 	# download the script 
 	wget https://raw.githubusercontent.com/H4M1O/usi/master/usi.sh
 	# modify the permission on it
@@ -34,9 +34,22 @@ Under this line you'll find all the news regarding this project.
 The verson of the script will be written via a comment inside the script itself.
 The versoning will follow this rule: v.A.B.C where A is the main release, B is the incresing number on every new functionality and C is the incrising number for every bug fixed.
 
-Current Release::
+Current Stable Release::
 
-	usi-v.1.0.0
+	USI - Version: 1.1.1
+
+What's new in usi-v.1.1.1
+-------------------------
+
+Solved some minor bugs inside the menu and for the installation of Vim.
+
+New features:
+
+- The menu contains now 3 choices HARDENING OS, LAMP INSTALLATION and UTILITIES
+- Added inside Utilities menu the options VIM, I3, ALIASES
+- Added full support for the installation of VIM and the configuration with Molokai colorsheme
+- Changed the name to usi.sh
+- Removed unused folder utils
 
 What's new in usi-v.1.0.0
 -------------------------
