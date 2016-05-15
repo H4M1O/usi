@@ -36,7 +36,17 @@ The versoning will follow this rule: v.A.B.C where A is the main release, B is t
 
 Current Stable Release::
 
-	USI - Version: 1.1.2
+	USI - Version: 1.2.1
+
+What's new in usi-v.1.2.1
+-------------------------
+
+No bugs fixed, just added new functionalities
+
+New features:
+
+- Inserted AUTO-UPDATES into OS_HARDENING
+- Inserted CURL, I3 and TMUX into UTILITIES MENUS
 
 What's new in usi-v.1.1.2
 -------------------------

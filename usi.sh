@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script: Universal Script Installer
 # Description: USI is a textual bash script that allows to install or configure easily a Linux machine.
-# Version: 1.1.2
+# Version: 1.2.1
 # Date: 15-05-2016
 # Author: Claudio Proietti
 # License: The MIT License (MIT) - Copyright (c) 2016 Claudio Proietti
@@ -99,7 +99,7 @@ function menu_update ()
 
 function title ()
 {
-	echo "$(tput setaf 3)$(tput bold)Welcome to U.S.I. - Universal Script Installer v. 1.1.2"
+	echo "$(tput setaf 3)$(tput bold)Welcome to U.S.I. - Universal Script Installer"
 	echo -e "Script created by Claudio Proietti under MIT license$(tput sgr 0)\n"
 }
 
@@ -120,6 +120,7 @@ function OS_HARDENING ()
 	inst_sudo
 	inst_f2b
 	inst_ufw
+	auto_updates
 	echo -e "$(tput setaf 0)$(tput setab 2)\nOS_HARDENING COMPLETED!$(tput sgr 0)\n"
 	cnt
 }
@@ -397,18 +398,22 @@ function inst_sudo ()
 				echo "$(tput setaf 3)Insert the password of the new user (ex. cproietti): $(tput sgr 0)" 
 				read PWD
 				useradd -c $FULL_NAME -m -p $PWD -s "/bin/bash" -U $USER_NAME
+				echo -e "$(tput setaf 0)$(tput setab 2)\nNEW USER ADDED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				2 ) apt-get install sudo -y
 				echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
 				visudo
+				echo -e "$(tput setaf 0)$(tput setab 2)\nVISUDO CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				3 ) vi /etc/ssh/sshd_config
 				/etc/init.d/sshd restart
+				echo -e "$(tput setaf 0)$(tput setab 2)\nSSHD CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				4 ) passwd
+				echo -e "$(tput setaf 0)$(tput setab 2)\nROOT PASSWORD CHANGED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				5 )  
@@ -448,10 +453,13 @@ function inst_f2b ()
 		then
 			case $OPT6 in 
 				1 ) apt-get install fail2ban -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nFAIL2BAN INSTALLED CORRECTLY!$(tput sgr 0)\n"
+				cnt
 				;;
 				2 ) cp /etc/fail2ban/fail2ban.conf etc/fail2ban/fail2ban.local
 				cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 				vi /etc/fail2ban/jail.local
+				echo -e "$(tput setaf 0)$(tput setab 2)\nFAIL2BAN CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				fail2ban-client reload
 				cnt
 				;;
@@ -492,6 +500,7 @@ function inst_ufw ()
 		then
 			case $OPT7 in 
 				1 ) apt-get install ufw -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nUFW INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				2 ) ufw enable
@@ -500,6 +509,7 @@ function inst_ufw ()
 				ufw allow ssh
 				ufw allow http
 				ufw status verbose
+				echo -e "$(tput setaf 0)$(tput setab 2)\nUFW CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				3 )  
@@ -513,6 +523,72 @@ function inst_ufw ()
 			esac
 		else
 			echo $OPT7
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
+}
+
+function auto_updates ()
+{
+	clear
+	# declared integer for user's choice
+	declare -i OPT6
+	while true
+	do
+		title
+		echo "$(tput setaf 5)Choose the options to install and configure automatic updates:"
+		echo "1 - INSTALL AUTO-UPDATES"
+		echo "2 - CONFIGURE AUTO-UPDATES" 
+		echo -e "\n3 - Skip this configuration..." 
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT6
+		if [ $OPT6 -ge 0 -a $OPT6 -le 3 ] 
+		then
+			case $OPT6 in 
+				1 ) apt-get install unattended-upgrades apt-listchanges -y
+				touch  /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// Control parameters for cron jobs by /etc/cron.daily/apt //" > /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// Enable the update/upgrade script (0=disable)" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "APT::Periodic::Enable "1";" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// Do "apt-get update" automatically every n-days (0=disable)" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "APT::Periodic::Update-Package-Lists "1";" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// Do "apt-get upgrade --download-only" every n-days (0=disable)" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "APT::Periodic::Download-Upgradeable-Packages "1";" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// Run the "unattended-upgrade" security upgrade script" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// every n-days (0=disabled)" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// Requires the package "unattended-upgrades" and will write" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// a log in /var/log/unattended-upgrades" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "APT::Periodic::Unattended-Upgrade "1";" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// Do "apt-get autoclean" every n-days (0=disable)" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "APT::Periodic::AutocleanInterval "21";" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "// Send report mail to root" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "//     0:  no report             (or null string)" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "//     1:  progress report       (actually any string)" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "//     2:  + command outputs     (remove -qq, remove 2>/dev/null, add -d)" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "//     3:  + trace on" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "APT::Periodic::Verbose "2";" >> /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "$(tput setaf 0)$(tput setab 2)\nAUTOMATIC UPDATES INSTALLED AND CONFIGURED CORRECTLY (Security Updates)!$(tput sgr 0)\n"
+				cnt
+				;;
+				2 ) vi /etc/apt/apt.conf.d/50unattended-upgrades 
+				vi /etc/apt/apt.conf.d/20auto-upgrades
+				echo -e "$(tput setaf 0)$(tput setab 2)\nAUTO UPDATES CONFIGURED CORRECTLY!$(tput sgr 0)\n"
+				cnt
+				;;
+				3 )  
+				echo -e "$(tput setaf 7)$(tput setab 0)\nAutomatic Updates configuration skipped!$(tput sgr 0)\n"
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT6
 			clear
 			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
 		fi
@@ -552,11 +628,13 @@ function inst_webserv ()
 			case $OPT8 in 
 				1 ) apt-get install apache2 apache2-doc -y
 				service apache2 restart
+				echo -e "$(tput setaf 0)$(tput setab 2)\nAPACHE2 INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				break
 				;;
 				2 )  apt-get install nginx -y
 				systemctl restart nginx.service
+				echo -e "$(tput setaf 0)$(tput setab 2)\nNGIX INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				break	
 				;;
@@ -599,18 +677,22 @@ function inst_db ()
 		then
 			case $OPT9 in 
 				1 ) apt-get install mysql-server -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nMYSQL-SERVER AND CLIENT INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				break
 				;;
 				2 ) apt-get install mysql-client -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nMYSQL-CLIENT INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				break
 				;;
 				3 ) apt-get install postgresql-9.4 postgresql-client-9.4 postgresql-doc -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nPOSTGRES-SERVER AND CLIENT INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				break	
 				;;
 				4 ) apt-get install postgresql-client-9.4 postgresql-doc -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nPOSTGRES-CLIENT INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				break	
 				;;
@@ -656,18 +738,22 @@ function inst_php ()
 				touch /var/www/html/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
+				echo -e "$(tput setaf 0)$(tput setab 2)\nPHP FOR APACHE INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				2 ) apt-get install php5-fpm -y
 				touch /usr/share/ngix/www/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
+				echo -e "$(tput setaf 0)$(tput setab 2)\nPHP FOR NIGIX INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				3 ) apt-get install php5-mysql -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nPHP MODULES FOR MYSQL INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				4 ) apt-get install php5-pgsql -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nPHP MODULES FOR POSTGRES INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				5)  
@@ -697,9 +783,9 @@ function UTILITIES ()
 		title
 		echo "$(tput setaf 5)Select the option to install and configure the following utilities:"
 		echo "1 - INSTALL AND CONFIGURE VIM"
-		echo "2 - INSTALL AND CONFIGURE ALIASES" 
-		echo "3 - INSTALL AND CONFIGURE i3" 
-		echo "4 - not enabled" 
+		echo "2 - INSTALL CURL" 
+		echo "3 - INSTALL I3" 
+		echo "4 - INSTALL TMUX" 
 		echo -e "\n5 - Skip this configuration..." 
 		echo -e "\n0 - Return to the main menu\n"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
@@ -731,13 +817,16 @@ function UTILITIES ()
 				cnt
 				break
 				;;
-				2 ) echo "Function not enabled!"
+				2 ) apt-get install curl -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nINSTALLATION OF CURL COMPLETED!$(tput sgr 0)\n"
 				cnt
 				;;
-				3 ) echo "Function not enabled!"
+				3 ) apt-get install i3 -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nINSTALLATION OF I3 COMPLETED!$(tput sgr 0)\n"
 				cnt
 				;;
-				4 ) echo "Function not enabled!"
+				4 ) apt-get install tmux -y
+				echo -e "$(tput setaf 0)$(tput setab 2)\nINSTALLATION OF TMUX COMPLETED!$(tput sgr 0)\n"
 				cnt
 				;;
 				0 ) clear
