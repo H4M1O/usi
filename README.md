@@ -36,7 +36,16 @@ The versoning will follow this rule: v.A.B.C where A is the main release, B is t
 
 Current Stable Release::
 
-	USI - Version: 1.1.1
+	USI - Version: 1.1.2
+
+What's new in usi-v.1.1.2
+-------------------------
+
+Solved Vim molokai bug and "press enter button to continue"
+
+New features:
+
+- no new features
 
 What's new in usi-v.1.1.1
 -------------------------

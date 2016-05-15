@@ -1,8 +1,8 @@
 #!/bin/bash
 # Script: Universal Script Installer
 # Description: USI is a textual bash script that allows to install or configure easily a Linux machine.
-# Version: 1.1.1
-# Date: 14-05-2016
+# Version: 1.1.2
+# Date: 15-05-2016
 # Author: Claudio Proietti
 # License: The MIT License (MIT) - Copyright (c) 2016 Claudio Proietti
 
@@ -99,13 +99,14 @@ function menu_update ()
 
 function title ()
 {
-	echo "$(tput setaf 5)Welcome to U.S.I. - Universal Script Installer v. 1.1.1"
+	echo "$(tput setaf 3)$(tput bold)Welcome to U.S.I. - Universal Script Installer v. 1.1.2"
 	echo -e "Script created by Claudio Proietti under MIT license$(tput sgr 0)\n"
 }
 
 function cnt () 
 {
-read "Press a key to continue..."
+echo "Press ENTER to continue..."
+read
 }
 
 function OS_HARDENING ()
@@ -396,15 +397,19 @@ function inst_sudo ()
 				echo "$(tput setaf 3)Insert the password of the new user (ex. cproietti): $(tput sgr 0)" 
 				read PWD
 				useradd -c $FULL_NAME -m -p $PWD -s "/bin/bash" -U $USER_NAME
+				cnt
 				;;
 				2 ) apt-get install sudo -y
 				echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
 				visudo
+				cnt
 				;;
 				3 ) vi /etc/ssh/sshd_config
 				/etc/init.d/sshd restart
+				cnt
 				;;
 				4 ) passwd
+				cnt
 				;;
 				5 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nUsers configuration skipped!$(tput sgr 0)\n"
@@ -448,6 +453,7 @@ function inst_f2b ()
 				cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 				vi /etc/fail2ban/jail.local
 				fail2ban-client reload
+				cnt
 				;;
 				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nFail2Ban configuration skipped!$(tput sgr 0)\n"
@@ -486,6 +492,7 @@ function inst_ufw ()
 		then
 			case $OPT7 in 
 				1 ) apt-get install ufw -y
+				cnt
 				;;
 				2 ) ufw enable
 				ufw default deny incoming
@@ -493,6 +500,7 @@ function inst_ufw ()
 				ufw allow ssh
 				ufw allow http
 				ufw status verbose
+				cnt
 				;;
 				3 )  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nUFW configuration skipped!$(tput sgr 0)\n"
@@ -520,6 +528,7 @@ function LAMP ()
 	inst_db 
 	inst_php
 	echo -e "$(tput setaf 0)$(tput setab 2)\nLAMP INSTALLATION COMPLETED!$(tput sgr 0)\n"
+	cnt
 }
 
 function inst_webserv ()
@@ -543,10 +552,12 @@ function inst_webserv ()
 			case $OPT8 in 
 				1 ) apt-get install apache2 apache2-doc -y
 				service apache2 restart
+				cnt
 				break
 				;;
 				2 )  apt-get install nginx -y
 				systemctl restart nginx.service
+				cnt
 				break	
 				;;
 				3 )  
@@ -588,15 +599,19 @@ function inst_db ()
 		then
 			case $OPT9 in 
 				1 ) apt-get install mysql-server -y
+				cnt
 				break
 				;;
 				2 ) apt-get install mysql-client -y
+				cnt
 				break
 				;;
 				3 ) apt-get install postgresql-9.4 postgresql-client-9.4 postgresql-doc -y
+				cnt
 				break	
 				;;
 				4 ) apt-get install postgresql-client-9.4 postgresql-doc -y
+				cnt
 				break	
 				;;
 				5 )  
@@ -641,15 +656,19 @@ function inst_php ()
 				touch /var/www/html/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
+				cnt
 				;;
 				2 ) apt-get install php5-fpm -y
 				touch /usr/share/ngix/www/info.php
 				echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 				chmod 777 /var/www/html/info.php
+				cnt
 				;;
 				3 ) apt-get install php5-mysql -y
+				cnt
 				;;
 				4 ) apt-get install php5-pgsql -y
+				cnt
 				;;
 				5)  
 				echo -e "$(tput setaf 7)$(tput setab 0)\nUFW configuration skipped!$(tput sgr 0)\n"
@@ -709,13 +728,17 @@ function UTILITIES ()
 				mv .vimrc ~/
 				mv molokai.vim ~/.vim/colors/
 				echo -e "$(tput setaf 0)$(tput setab 2)\nINSTALLATION AND CONFIGURATION OF VIM COMPLETED!$(tput sgr 0)\n"
+				cnt
 				break
 				;;
 				2 ) echo "Function not enabled!"
+				cnt
 				;;
 				3 ) echo "Function not enabled!"
+				cnt
 				;;
 				4 ) echo "Function not enabled!"
+				cnt
 				;;
 				0 ) clear
 				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
@@ -732,22 +755,21 @@ function UTILITIES ()
 
 function molokai () 
 {
-echo -e "
-# Vim color file
-#
-# Author: Tomas Restrepo <tomas@winterdom.com>
-# https://github.com/tomasr/molokai
-#
-# Note: Based on the Monokai theme for TextMate
-# by Wimer Hazenberg and its darker variant
-# by Hamish Stuart Macpherson
-#
+echo -e '
+" Vim color file
+"
+" Author: Tomas Restrepo <tomas@winterdom.com>
+" https://github.com/tomasr/molokai
+"
+" Note: Based on the Monokai theme for TextMate
+" by Wimer Hazenberg and its darker variant
+" by Hamish Stuart Macpherson
+"
 
 hi clear
 
 if version > 580
-    # no guarantees for version 5.8 and below, but this makes it stop
-    # complaining
+    " no guarantees for version 5.8 and below, but this makes it stop complaining
     hi clear
     if exists("syntax_on")
         syntax reset
@@ -800,7 +822,7 @@ hi ModeMsg         guifg=#E6DB74
 hi MoreMsg         guifg=#E6DB74
 hi Operator        guifg=#F92672
 
-# complete menu
+" complete menu
 hi Pmenu           guifg=#66D9EF guibg=#000000
 hi PmenuSel                      guibg=#808080
 hi PmenuSbar                     guibg=#080808
@@ -811,7 +833,7 @@ hi PreProc         guifg=#A6E22E
 hi Question        guifg=#66D9EF
 hi Repeat          guifg=#F92672               gui=bold
 hi Search          guifg=#000000 guibg=#FFE792
-# marks
+" marks
 hi SignColumn      guifg=#A6E22E guibg=#232526
 hi SpecialChar     guifg=#F92672               gui=bold
 hi SpecialComment  guifg=#7E8E91               gui=bold
@@ -866,9 +888,9 @@ else
    hi SpecialKey      guifg=#465457
 end
 
-#
-# Support for 256-color terminal
-#
+"
+" Support for 256-color terminal
+"
 if &t_Co > 255
    if s:molokai_original == 1
       hi Normal                   ctermbg=234
@@ -917,7 +939,7 @@ if &t_Co > 255
    hi MoreMsg         ctermfg=229
    hi Operator        ctermfg=161
 
-   # complete menu
+   " complete menu
    hi Pmenu           ctermfg=81  ctermbg=16
    hi PmenuSel        ctermfg=255 ctermbg=242
    hi PmenuSbar                   ctermbg=232
@@ -929,7 +951,7 @@ if &t_Co > 255
    hi Repeat          ctermfg=161               cterm=bold
    hi Search          ctermfg=0   ctermbg=222   cterm=NONE
 
-   # marks column
+   " marks column
    hi SignColumn      ctermfg=118 ctermbg=235
    hi SpecialChar     ctermfg=161               cterm=bold
    hi SpecialComment  ctermfg=245               cterm=bold
@@ -1006,10 +1028,10 @@ if &t_Co > 255
    endif
 end
 
-# Must be at the end, because of ctermbg=234 bug.
-# https://groups.google.com/forum/#!msg/vim_dev/afPqwAFNdrU/nqh6tOM87QUJ
+" Must be at the end, because of ctermbg=234 bug.
+" https://groups.google.com/forum/#!msg/vim_dev/afPqwAFNdrU/nqh6tOM87QUJ
 set background=dark
-"
+'
 }
 
 # Call to the main function
