@@ -804,6 +804,7 @@ function UTILITIES ()
 				echo ":set cursorcolumn" >> .vimrc
 				echo ":set cursorline" >> .vimrc
 				echo ":set number" >> .vimrc
+				echo ":set numberwidth=5" >> .vimrc
 				echo ":set autoindent" >> .vimrc
 				echo ":syntax on" >> .vimrc
 				echo ":colorscheme molokai" >> .vimrc
@@ -811,6 +812,21 @@ function UTILITIES ()
 				echo ":nnoremap <F2> :set invpaste paste?<CR>" >> .vimrc 
 				echo ":set pastetoggle=<F2>" >> .vimrc
  				echo ":set showmode" >> .vimrc
+				echo ":set hystory=50" >> .vimrc
+				echo ":set ruler" >> .vimrc
+				echo ":set showcmd" >> .vimrc
+				echo ":set laststatus=2" >> .vimrc
+				echo ":set autowrite" >> .vimrc
+				echo ":set reload" >> .vimrc
+				echo ":set visualbell" >> .vimrc
+				echo ":set gdefault" >> .vimrc
+				echo ":set ignorecase" >> .vimrc
+				echo ":set smartcase" >> .vimrc
+				echo ":set hlsearch" >> .vimrc
+				echo ":set incsearch" >> .vimrc
+				echo ":set showmatch" >> .vimrc
+				echo ":set tabstop=4" >> .vimrc
+				echo ":set colorcolumn=+1" >> .vimrc
 				mv .vimrc ~/
 				mv molokai.vim ~/.vim/colors/
 				echo -e "$(tput setaf 0)$(tput setab 2)\nINSTALLATION AND CONFIGURATION OF VIM COMPLETED!$(tput sgr 0)\n"
