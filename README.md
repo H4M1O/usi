@@ -21,7 +21,7 @@ development packages installed in your system) the standard::
 	# access as root
 	su -root
 	# download the script 
-	wget https://raw.githubusercontent.com/H4M1O/usi/master/usi.sh
+	curl -O https://raw.githubusercontent.com/H4M1O/usi/master/usi.sh
 	# modify the permission on it
 	chmod 755 usi.sh
 	# launch it and enjoy :)
@@ -36,7 +36,17 @@ The versoning will follow this rule: v.A.B.C where A is the main release, B is t
 
 Current Stable Release::
 
-	USI - Version: 1.2.1
+	USI - Version: 1.2.2
+
+What's new in usi-v.1.2.2
+-------------------------
+
+Fixed minor bugs about molokai and vim and improved 2 old functionalities
+
+New features:
+
+- Improved SSH key generator and SSHD config
+- Improved Fail2Ban configuration with pre-configured jail.local file
 
 What's new in usi-v.1.2.1
 -------------------------
