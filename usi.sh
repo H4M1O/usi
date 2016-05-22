@@ -336,7 +336,7 @@ function serv_ssh ()
 		title
 		echo "$(tput setaf 5)Choose the type of the SSH software to install and configure:"
 		echo "1 - SSH CLIENT"
-		echo "2 - SSH SERVER" 
+		echo "2 - SSH SERVER (ATTENTION: it will modify sshd_config and disable the password login!!!)" 
 		echo -e "\n3 - Skip this configuration..." 
 		echo -e "\n0 - Return to the main menu\n"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
@@ -350,7 +350,8 @@ function serv_ssh ()
 				cnt
 				;;
 				2 ) apt-get install openssh-server -y
-				echo -e "$(tput setaf 0)$(tput setab 2)\nSSH SERVER INSTALLED CORRECTLY!$(tput sgr 0)\n"
+				sshd_config
+                echo -e "$(tput setaf 0)$(tput setab 2)\nSSH SERVER INSTALLED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				3 )  
@@ -408,13 +409,11 @@ function inst_sudo ()
 				cnt
 				;;
 				3 ) ssh-keygen -b 4096 -t rsa
-                sshd_config
-				/etc/init.d/sshd restart
+                /etc/init.d/sshd restart
                 clear
-			    echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have the 
-                following key before continue or you will not be able to access 
-                this machine!!!$(tput sgr 0)\n"
+			    echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have the following key before continue or you will not be able to access this machine!!!$(tput sgr 0)\n"
                 cat ~/.ssh/id_rsa
+			    echo -e "\n$(tput setaf 7)$(tput setab 1)ATTENTION: You have the following key before continue or you will not be able to access this machine!!!$(tput sgr 0)\n"
                 rm ~/.ssh/id_rsa
                 echo -e "$(tput setaf 0)$(tput setab 2)\nSSHD CONFIGURED CORRECTLY!$(tput sgr 0)\n"
 				cnt
@@ -1246,9 +1245,9 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 # the setting of "PermitRootLogin without-password".                     
 # If you just want the PAM account and session checks to run without     
 # PAM authentication, then enable this but set PasswordAuthentication    
-# and ChallengeResponseAuthentication to 'no'.                           
+# and ChallengeResponseAuthentication to no.                           
 UsePAM no
-' > ~/.ssh/sshd_config
+' > /etc/ssh/sshd_config
 }
 
 function LAMP ()
@@ -1797,5 +1796,4 @@ set background=dark
 
 # Call to the main function
 so_update
-wget https://raw.githubusercontent.com/H4M1O/usi/master/README.md
 main
