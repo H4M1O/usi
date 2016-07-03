@@ -36,7 +36,13 @@ The versoning will follow this rule: v.A.B.C where A is the main release, B is t
 
 Current Stable Release::
 
-	USI - Version: 1.3.4
+	USI - Version: 1.3.5
+
+What's new in usi-v.1.3.5
+-------------------------
+
+Fixed minor bugs inside the SSH configuration menu and modified textual menu 
+under voice "change root password" into "change user password".
 
 What's new in usi-v.1.3.4
 -------------------------

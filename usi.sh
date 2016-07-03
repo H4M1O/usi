@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script: Universal Script Installer
 # Description: USI is a textual bash script that allows to install or configure easily a Linux machine.
-# Version: 1.3.4
+# Version: 1.3.5
 # Date: 03-07-2016
 # Author: Claudio Proietti
 # License: The MIT License (MIT) - Copyright (c) 2016 Claudio Proietti
@@ -386,7 +386,7 @@ function inst_sudo ()
 		echo "1 - ADD A NEW USER (Experimental and actually broken, don't use it!)"
         echo "2 - INSTALL SUDO (Not recommended!)" 
 		echo "3 - MODIFY SSH CONNECTIONS AND AUTORIZATIONS" 
-		echo "4 - CHANGE ROOT PASSWORD" 
+		echo "4 - CHANGE USER PASSWORD" 
 		echo -e "\n5 - Skip this configuration..." 
 		echo -e "\n0 - Return to the main menu\n"
 		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
@@ -413,6 +413,8 @@ function inst_sudo ()
 				;;
 				3 ) ssh-keygen -b 4096 -t rsa
                 /etc/init.d/sshd restart
+                service ssh restart
+                service ssh status
                 clear
 			    echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have the following key before continue or you will not be able to access this machine!!!$(tput sgr 0)\n"
                 cat ~/.ssh/id_rsa
@@ -422,7 +424,7 @@ function inst_sudo ()
 				cnt
 				;;
 				4 ) passwd
-				echo -e "$(tput setaf 0)$(tput setab 2)\nROOT PASSWORD CHANGED CORRECTLY!$(tput sgr 0)\n"
+				echo -e "$(tput setaf 0)$(tput setab 2)\nUSER PASSWORD CHANGED CORRECTLY!$(tput sgr 0)\n"
 				cnt
 				;;
 				5 )  
