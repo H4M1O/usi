@@ -36,7 +36,21 @@ The versoning will follow this rule: v.A.B.C where A is the main release, B is t
 
 Current Stable Release::
 
-	USI - Version: 1.2.2
+	USI - Version: 1.3.3
+
+What's new in usi-v.1.3.3
+-------------------------
+
+Fixed minor bugs about LIZMAP and PHP
+
+New features:
+
+- Added definitive LIZMAP setup
+
+What's new in usi-v.1.3.2
+-------------------------
+
+Added automatic installation for LIZMAP.
 
 What's new in usi-v.1.2.2
 -------------------------

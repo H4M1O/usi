@@ -1,8 +1,8 @@
 #!/bin/bash
 # Script: Universal Script Installer
 # Description: USI is a textual bash script that allows to install or configure easily a Linux machine.
-# Version: 1.2.2
-# Date: 20-05-2016
+# Version: 1.3.3
+# Date: 03-07-2016
 # Author: Claudio Proietti
 # License: The MIT License (MIT) - Copyright (c) 2016 Claudio Proietti
 
@@ -17,7 +17,7 @@ function main ()
 		menu
 		# read input from keyboard
 		read OPT
-		if [ $OPT -ge 0 -a $OPT -le 3 ] 
+		if [ $OPT -ge 0 -a $OPT -le 4 ] 
 		then
 			case $OPT in 
 				1 ) OS_HARDENING 
@@ -26,6 +26,8 @@ function main ()
 				;;
 				3 ) UTILITIES
 				;;
+                4 ) LIZMAP
+                ;;
 				0 ) clear
 				echo -e "$(tput setaf 7)$(tput setab 0)\nThank you for using this script!$(tput sgr 0)\n"
 				exit 1
@@ -81,6 +83,7 @@ function menu ()
 	echo "1 - OS_HARDENING (hostname, ifconfig, ssh, sudo, fail2ban, ufw)"
 	echo "2 - LAMP (WebServer Apache or NGIX, DB MySQL or PostGres, PHP and PHP Modules)" 
 	echo "3 - UTILITIES (Vim, I3, Aliasies, ecc..)"
+	echo "4 - LIZMAP (Always latest version!!!)"
 	echo -e "\n0 - Exit the script\n"
 	echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
 }
@@ -1370,7 +1373,7 @@ function inst_db ()
 
 function inst_php ()
 {
-	cleat
+	clear
 	# declared integer for user's choice
 	declare -i OPT10
 	while true
@@ -1792,6 +1795,51 @@ end
 " https://groups.google.com/forum/#!msg/vim_dev/afPqwAFNdrU/nqh6tOM87QUJ
 set background=dark
 '
+}
+
+function LIZMAP ()
+{
+	clear
+	# declared integer for user's choice
+	declare -i OPT10
+	while true
+	do
+		title
+		echo "$(tput setaf 5)Choose the options to install and configure LIZMAP:"
+        echo "1 - INSTALL AND CONFIGURE LIZMAP (Apache must be installed first!!!)"
+		echo -e "\n0 - Return to the main menu\n"
+		echo "$(tput setaf 3)Write now the option that you want select and press enter: $(tput sgr 0)"	
+		# readed input from keyboard
+		read OPT10
+		if [ $OPT10 -ge 0 -a $OPT10 -le 1 ] 
+		then
+			case $OPT10 in 
+				1 ) apt-get install unzip curl apache2 apache2-doc php5 libapache2-mod-php5 php5-mcrypt php5-sqlite php5-gd php5-xmlrpc -y 
+                wget https://github.com/3liz/lizmap-web-client/archive/master.zip -P /var/www/
+				unzip /var/www/master.zip -d /var/www/
+				mv /var/www/lizmap-web-client-master /var/www/mylizmap
+				rm /var/www/master.zip
+                cd /var/www/mylizmap/
+				/var/www/mylizmap/lizmap/install/set_rights.sh www-data www-data
+				cp /var/www/mylizmap/lizmap/var/config/lizmapConfig.ini.php.dist /var/www/mylizmap/lizmap/var/config/lizmapConfig.ini.php
+				cp /var/www/mylizmap/lizmap/var/config/localconfig.ini.php.dist /var/www/mylizmap/lizmap/var/config/localconfig.ini.php
+				cp /var/www/mylizmap/lizmap/var/config/profiles.ini.php.dist /var/www/mylizmap/lizmap/var/config/profiles.ini.php
+				echo "[modules]" >> /var/www/mylizmap/lizmap/var/config/localconfig.ini.php
+				echo "lizmap.installparam=demo" >> /var/www/mylizmap/lizmap/var/config/localconfig.ini.php
+				php /var/www/mylizmap/lizmap/install/installer.php				
+				break
+				;;
+				0 ) clear
+				echo -e "$(tput setaf 7)$(tput setab 0)\nReturn to the main menu!$(tput sgr 0)\n"
+				main
+				;;
+			esac
+		else
+			echo $OPT10
+			clear
+			echo -e "$(tput setaf 7)$(tput setab 1)ATTENTION: You have inserted the wrong option!!!$(tput sgr 0)\n"
+		fi
+	done
 }
 
 # Call to the main function
