@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script: Universal Script Installer
 # Description: USI is a textual bash script that allows to install or configure easily a Linux machine.
-# Version: 1.3.3
+# Version: 1.3.4
 # Date: 03-07-2016
 # Author: Claudio Proietti
 # License: The MIT License (MIT) - Copyright (c) 2016 Claudio Proietti
@@ -1194,8 +1194,7 @@ StrictModes yes
 
 RSAAuthentication yes
 PubkeyAuthentication yes
-AuthorizedKeysFile %u/.ssh/id_rsa.pub
-clear
+AuthorizedKeysFile /home/%u/.ssh/id_rsa.pub
 
 # Dont read the users ~/.rhosts and ~/.shosts files                 
 IgnoreRhosts yes                                                         

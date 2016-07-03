@@ -36,7 +36,12 @@ The versoning will follow this rule: v.A.B.C where A is the main release, B is t
 
 Current Stable Release::
 
-	USI - Version: 1.3.3
+	USI - Version: 1.3.4
+
+What's new in usi-v.1.3.4
+-------------------------
+
+Fixed minor bugs inside the SSHD config file.
 
 What's new in usi-v.1.3.3
 -------------------------
